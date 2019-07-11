@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import {useState} from 'react';
 
-const Todo = ({ todo }) => <div className="todo">{todo.text}</div>
+
 
 function TodoForm( { addTodo }) {
   const [ value, setValue ] = useState("");
@@ -26,6 +26,19 @@ function TodoForm( { addTodo }) {
   );
 }
 
+function Todo({ todo, index, completeTodo }) {
+  return (
+    <div
+    className="todo"
+    style={{ textDecoration: todo.isCompleted ? "line-through" : ""}}
+    >
+      {todo.text}
+      <div>
+        <button onClick={() => completeTodo(index)}>Complete</button>
+      </div>
+    </div>
+  )
+}
 function App() {
     const [todos, setTodos] = useState([
       {
@@ -42,6 +55,12 @@ function App() {
      }
     ]);
 
+    const completeTodo = index => {
+      const newTodos = [...todos];
+      newTodos[index].isCompleted = true;
+      setTodos(newTodos);
+    };
+
     const addTodo = text => {
       const newTodos = [...todos, {text}];
       setTodos(newTodos);
@@ -55,6 +74,7 @@ function App() {
             key={index}
             index={index}
             todo={todo}
+            completeTodo={completeTodo}
             />
           ))}
           <TodoForm addTodo={addTodo} />
