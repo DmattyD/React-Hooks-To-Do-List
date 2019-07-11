@@ -1,16 +1,52 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import useState from 'react';
+import {useState} from 'react';
+
+const Todo = ({ todo }) => <div className="todo">{todo.text}</div>
+
+function TodoForm( { addTodo }) {
+  const [ value, setValue ] = useState("");
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!value) return;
+    addTodo(value);
+    setValue("");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+      type="text"
+      className="input"
+      value={value}
+      onChange={e => setValue(e.target.value)} />
+    </form>
+    
+  );
+}
+
 function App() {
     const [todos, setTodos] = useState([
-      {text: "Learn about React" },
-      { text: "Meet Friend for lunch" },
-      { text: "Build really colol todo app" }
+      {
+        text: "Learn about React",
+      isCompleted: false
+     },
+      { 
+        text: "Meet Friend for lunch",
+      isCompleted: false
+     },
+      { 
+        text: "Build really colol todo app",
+      isCompleted: false
+     }
     ]);
 
-    const Todo = ({ todo }) =><div classname="todo">{todo.text}</div>
-      
+    const addTodo = text => {
+      const newTodos = [...todos, {text}];
+      setTodos(newTodos);
+    };
+
     return (
       <div className="app">
         <div className="todo-list">
@@ -21,6 +57,7 @@ function App() {
             todo={todo}
             />
           ))}
+          <TodoForm addTodo={addTodo} />
           </div>
           </div>
     );
